@@ -42,14 +42,6 @@ fun AppHost(context: Context) {
     val database = AppDatabase.getInstance(context)
     val solveRepository = SolveRepository(database.getSolveDao())
 
-    val historyViewModel: HistoryViewModel = viewModel(
-        factory = HistoryViewModelFactory(solveRepository)
-    )
-//    val addEntryViewModel: AddEntryViewModel = viewModel(
-//        factory = AddEntryViewModelFactory(solveRepository)
-//    )
-
-    val solves by historyViewModel.solves.collectAsState(emptyList())
 
     Scaffold(
         topBar = {
@@ -98,14 +90,28 @@ fun AppHost(context: Context) {
         ) {
             navigation<Navigation.Main>(startDestination = History) {
 
-                composable<History> {
+                composable<History> { backStackEntry ->
+                    val historyViewModel: HistoryViewModel = viewModel(
+                        viewModelStoreOwner = backStackEntry,
+                        factory = HistoryViewModelFactory(solveRepository)
+                    )
+                    val solves by historyViewModel.solves.collectAsState(emptyList())
+
                     HistoryScreen(
                         solves = solves
                     )
                 }
 
-                composable<AddEntry> {
-                    AddEntryScreen()
+                composable<AddEntry> { backStackEntry ->
+                    val addEntryViewModel: AddEntryViewModel = viewModel(
+                        viewModelStoreOwner = backStackEntry,
+                        factory = AddEntryViewModelFactory(solveRepository)
+                    )
+
+                    AddEntryScreen(
+                        viewModel = addEntryViewModel,
+                        onSaveCompleted = { navController.popBackStack() }
+                    )
                 }
             }
         }
