@@ -22,9 +22,9 @@ fun parse(rawText: String): Solve? {
     return Solve(
         puzzleNumber = puzzleNumber,
         theme = theme,
-        dateLogged = System.currentTimeMillis(),
         totalWords = totalWords,
         hintsUsed = hintsUsed,
+        glyphSequence = emojiLines,
         rawShareText = rawText
     )
 }

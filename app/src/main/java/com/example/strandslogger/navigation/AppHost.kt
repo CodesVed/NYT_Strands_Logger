@@ -1,8 +1,18 @@
 package com.example.strandslogger.navigation
 
 import android.content.Context
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.PostAdd
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -10,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.strandslogger.data.local.AppDatabase
@@ -23,6 +34,7 @@ import com.example.strandslogger.ui.history.HistoryViewModel
 import com.example.strandslogger.ui.history.HistoryViewModelFactory
 import kotlin.collections.emptyList
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppHost(context: Context) {
     val navController = rememberNavController()
@@ -33,13 +45,51 @@ fun AppHost(context: Context) {
     val historyViewModel: HistoryViewModel = viewModel(
         factory = HistoryViewModelFactory(solveRepository)
     )
-    val addEntryViewModel: AddEntryViewModel = viewModel(
-        factory = AddEntryViewModelFactory(solveRepository)
-    )
+//    val addEntryViewModel: AddEntryViewModel = viewModel(
+//        factory = AddEntryViewModelFactory(solveRepository)
+//    )
 
     val solves by historyViewModel.solves.collectAsState(emptyList())
 
     Scaffold(
+        topBar = {
+            val backStackEntry by navController.currentBackStackEntryAsState()
+            val titleText: String? = when (backStackEntry?.destination?.route) {
+                History::class.qualifiedName -> "Solve History"
+                AddEntry::class.qualifiedName -> "Log Today's Solve"
+                else -> null
+            }
+
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigate(History)     //TODO: to be replaced by Home
+                    }) {
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                    }
+                },
+                title = {
+                    Text(text = titleText.toString())
+                },
+                actions = {
+                    Row {
+                        IconButton(onClick = { navController.navigate(History) }) {
+                            Icon(
+                                imageVector = Icons.Default.History,
+                                contentDescription = null
+                            )
+                        }
+
+                        IconButton(onClick = { navController.navigate(AddEntry) }) {
+                            Icon(
+                                imageVector = Icons.Default.PostAdd,
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
+            )
+        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -47,8 +97,11 @@ fun AppHost(context: Context) {
             modifier = Modifier.padding(innerPadding)
         ) {
             navigation<Navigation.Main>(startDestination = History) {
+
                 composable<History> {
-                    HistoryScreen()
+                    HistoryScreen(
+                        solves = solves
+                    )
                 }
 
                 composable<AddEntry> {
