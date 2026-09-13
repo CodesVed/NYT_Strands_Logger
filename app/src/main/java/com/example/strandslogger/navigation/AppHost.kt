@@ -18,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -55,7 +56,7 @@ fun AppHost(context: Context) {
             TopAppBar(
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate(History)     //TODO: to be replaced by Home
+                        navController.goToHistory()     //TODO: to be replaced by Home
                     }) {
                         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
@@ -110,10 +111,17 @@ fun AppHost(context: Context) {
 
                     AddEntryScreen(
                         viewModel = addEntryViewModel,
-                        onSaveCompleted = { navController.popBackStack() }
+                        onSaveCompleted = { navController.goToHistory() }
                     )
                 }
             }
         }
+    }
+}
+
+fun NavHostController.goToHistory() {
+    navigate(History) {
+        popUpTo(History) { inclusive = false }
+        launchSingleTop = true
     }
 }

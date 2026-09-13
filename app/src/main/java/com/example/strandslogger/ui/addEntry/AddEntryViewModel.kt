@@ -6,14 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.strandslogger.data.model.Solve
 import com.example.strandslogger.data.parser.parse
 import com.example.strandslogger.data.repository.SolveRepository
-import com.example.strandslogger.ui.history.HistoryViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -32,9 +29,6 @@ sealed interface AddEntryEvent {
 class AddEntryViewModel(
     private val solveRepository: SolveRepository
 ): ViewModel() {
-
-    val solves = solveRepository.getAllSolves()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _uiState = MutableStateFlow(AddEntryUiState())
     val uiState: StateFlow<AddEntryUiState> = _uiState.asStateFlow()
