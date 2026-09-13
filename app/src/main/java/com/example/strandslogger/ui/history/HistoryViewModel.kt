@@ -17,12 +17,6 @@ private val solveRepository: SolveRepository
     val solves: Flow<List<Solve>> = solveRepository.getAllSolves()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
-    fun addSolve(solve: Solve) {
-        viewModelScope.launch {
-            solveRepository.addSolve(solve)
-        }
-    }
-
     fun deleteSolve(solve: Solve) {
         viewModelScope.launch {
             solveRepository.deleteSolve(solve)

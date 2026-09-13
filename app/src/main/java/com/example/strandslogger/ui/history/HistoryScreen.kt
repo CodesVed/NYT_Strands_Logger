@@ -4,15 +4,22 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.strandslogger.data.model.Solve
 
 @Composable
 fun HistoryScreen(
-    solves: List<Solve>
+    viewModel: HistoryViewModel,
+    solves: List<Solve>,
+    onDelete: (Solve) -> Unit
 ) {
     LazyColumn {
         items(solves) { solve ->
-            SolveCard(solve)
+            SolveCard(
+                viewModel = viewModel,
+                solve = solve,
+                onDelete = { onDelete(solve) }
+            )
         }
     }
 }
@@ -21,6 +28,8 @@ fun HistoryScreen(
 @Composable
 fun HistoryPreview() {
     HistoryScreen(
-        solves = emptyList()
+        viewModel = viewModel(),
+        solves = emptyList(),
+        onDelete = {}
     )
 }

@@ -99,7 +99,11 @@ fun AppHost(context: Context) {
                     val solves by historyViewModel.solves.collectAsState(emptyList())
 
                     HistoryScreen(
-                        solves = solves
+                        viewModel = historyViewModel,
+                        solves = solves,
+                        onDelete = { solve ->
+                            historyViewModel.deleteSolve(solve)
+                        }
                     )
                 }
 
