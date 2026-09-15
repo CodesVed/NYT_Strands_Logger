@@ -50,11 +50,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun  SolveCard(
     viewModel: HistoryViewModel,
-    solve: Solve,
-    onDelete: (Int) -> Unit
+    solve: Solve
 ) {
-    val solves by viewModel.solves.collectAsStateWithLifecycle(emptyList())
-
     var solveDeleteConfirmation by rememberSaveable { mutableStateOf(false) }
 
     Card(
@@ -116,7 +113,7 @@ fun  SolveCard(
 
         Text(
             modifier = Modifier.fillMaxWidth().padding(start = 10.dp),
-            text = solve.dateLogged.toString(),
+            text = solve.formattedPuzzleDate,
             fontSize = 14.sp
         )
 
@@ -179,8 +176,8 @@ fun SolveCardPreview() {
             totalWords = 7,
             hintsUsed = 0,
             glyphSequence = "🔵🔵🔵🟡",
-            rawShareText = ""
-        ),
-        onDelete = {}
+            rawShareText = "",
+            puzzleDateEpochDay = 23
+        )
     )
 }

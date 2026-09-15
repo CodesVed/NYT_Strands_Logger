@@ -1,5 +1,6 @@
 package com.example.strandslogger.data.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.Instant
@@ -14,20 +15,18 @@ data class Solve(
     val totalWords: Int,
     val hintsUsed: Int,
     val glyphSequence: String,
-    val rawShareText: String
+    val rawShareText: String,
+    @ColumnInfo(defaultValue = "0")
+    val puzzleDateEpochDay: Long
 ) {
     val isPerfect: Boolean get() = hintsUsed == 0
 
-    val dateLogged: String? get() {
-        val instant = Instant.ofEpochMilli(System.currentTimeMillis())
+    val puzzleDate: LocalDate get() = LocalDate.ofEpochDay(puzzleDateEpochDay)
+    val formattedPuzzleDate: String
+        get() = puzzleDate.format(uiDateFormatter)
 
-        val zoneId = ZoneId.systemDefault()
-        val zoneDateTime = instant.atZone(zoneId)
-
-        val formatter = DateTimeFormatter.ofPattern("EEE, MMM d, yyyy")
-        val formattedDate = zoneDateTime.format(formatter)
-
-        return formattedDate
+    companion object {
+        private val uiDateFormatter = DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy")
     }
 }
 

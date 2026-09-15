@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 import java.util.stream.Collectors
 
 private val StrandsBlue = Color(0xFF1450A3)
@@ -140,7 +141,7 @@ fun AddEntryScreen(
 
                     Spacer(Modifier.height(12.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        InfoBlock("Date", "Today", Modifier.weight(1f))
+                        InfoBlock("Date", solve.puzzleDate.format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy")), Modifier.weight(1f))
                         InfoBlock("Puzzle Edition", "Strands #${solve.puzzleNumber}", Modifier.weight(1f))
                     }
 

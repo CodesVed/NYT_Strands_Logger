@@ -1,22 +1,31 @@
 package com.example.strandslogger.navigation
 
+import android.app.Activity
 import android.content.Context
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.PostAdd
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -43,6 +52,20 @@ fun AppHost(context: Context) {
     val database = AppDatabase.getInstance(context)
     val solveRepository = SolveRepository(database.getSolveDao())
 
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+    val isOnHistory = currentRoute == History::class.qualifiedName
+
+    var showExitDialog by remember { mutableStateOf(false) }
+    val activity = LocalActivity.current
+
+    BackHandler(enabled = true) {
+        if (isOnHistory) {
+            showExitDialog = true
+        } else {
+            navController.goToHistory()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -66,14 +89,17 @@ fun AppHost(context: Context) {
                 },
                 actions = {
                     Row {
-                        IconButton(onClick = { navController.navigate(History) }) {
+                        IconButton(onClick = { navController.goToHistory() }) {
                             Icon(
                                 imageVector = Icons.Default.History,
                                 contentDescription = null
                             )
                         }
 
-                        IconButton(onClick = { navController.navigate(AddEntry) }) {
+                        IconButton(onClick = {
+                            navController.navigate(AddEntry)
+                            {launchSingleTop = true}
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.PostAdd,
                                 contentDescription = null
@@ -100,10 +126,7 @@ fun AppHost(context: Context) {
 
                     HistoryScreen(
                         viewModel = historyViewModel,
-                        solves = solves,
-                        onDelete = { solve ->
-                            historyViewModel.deleteSolve(solve)
-                        }
+                        solves = solves
                     )
                 }
 
@@ -119,6 +142,24 @@ fun AppHost(context: Context) {
                     )
                 }
             }
+        }
+
+        if (showExitDialog) {
+            AlertDialog(
+                onDismissRequest = { showExitDialog = false },
+                title = { Text(text = "Exit App?") },
+                text = { Text(text = "Are you sure you want to exit Daily Perfect Logger?") },
+                confirmButton = {
+                    TextButton(onClick = {activity?.finish()}) {
+                        Text(text = "Exit")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showExitDialog = false }) {
+                        Text(text = "Cancel")
+                    }
+                }
+            )
         }
     }
 }

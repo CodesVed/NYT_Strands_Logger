@@ -35,6 +35,7 @@ fun parse(rawText: String): Solve? {
         totalWords = totalWords,
         hintsUsed = hintsUsed,
         glyphSequence = emojiLines,
-        rawShareText = rawText
+        rawShareText = rawText,
+        puzzleDateEpochDay = puzzleDateFor(puzzleNumber).toEpochDay()
     )
 }
