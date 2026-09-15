@@ -13,7 +13,7 @@ fun HistoryScreen(
     solves: List<Solve>
 ) {
     LazyColumn {
-        items(solves) { solve ->
+        items(solves.sortedByDescending { it.puzzleNumber }) { solve ->
             SolveCard(
                 viewModel = viewModel,
                 solve = solve
