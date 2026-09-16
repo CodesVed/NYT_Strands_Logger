@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -34,6 +35,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.strandslogger.R
 import com.example.strandslogger.data.local.AppDatabase
 import com.example.strandslogger.data.repository.SolveRepository
 import com.example.strandslogger.navigation.Routes.*
@@ -152,7 +154,7 @@ fun AppHost(context: Context) {
             AlertDialog(
                 onDismissRequest = { showExitDialog = false },
                 title = { Text(text = "Exit App?") },
-                text = { Text(text = "Are you sure you want to exit Daily Perfect Logger?") },
+                text = { Text(text = "Are you sure you want to exit ${stringResource(R.string.app_name)}?") },
                 confirmButton = {
                     TextButton(onClick = {activity?.finish()}) {
                         Text(text = "Exit")

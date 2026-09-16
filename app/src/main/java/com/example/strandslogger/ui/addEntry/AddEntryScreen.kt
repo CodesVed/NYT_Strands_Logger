@@ -12,15 +12,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -175,11 +180,13 @@ fun AddEntryScreen(
         Spacer(Modifier.weight(1f))
 
         Button(
+            modifier = Modifier.fillMaxWidth().height(52.dp),
             onClick = viewModel::onSaveClicked,
             enabled = state.parsedPreview != null && !state.isSaving,
-            modifier = Modifier.fillMaxWidth().height(52.dp)
         ) {
-            Text(if (state.isSaving) "Saving…" else "Save Solve")
+            Icon(imageVector = Icons.Outlined.Save, contentDescription = "Save")
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(text = if (state.isSaving) "Saving…" else "Save Solve")
         }
         OutlinedButton(
             onClick = onSaveCompleted,
