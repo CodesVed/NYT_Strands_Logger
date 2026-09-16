@@ -1,5 +1,6 @@
 package com.example.strandslogger.navigation
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.BackHandler
@@ -44,6 +45,7 @@ import com.example.strandslogger.ui.history.HistoryViewModel
 import com.example.strandslogger.ui.history.HistoryViewModelFactory
 import kotlin.collections.emptyList
 
+@SuppressLint("ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppHost(context: Context) {
@@ -57,7 +59,7 @@ fun AppHost(context: Context) {
     val isOnHistory = currentRoute == History::class.qualifiedName
 
     var showExitDialog by remember { mutableStateOf(false) }
-    val activity = LocalActivity.current
+    val activity = LocalContext.current as? Activity
 
     BackHandler(enabled = true) {
         if (isOnHistory) {
@@ -69,8 +71,7 @@ fun AppHost(context: Context) {
 
     Scaffold(
         topBar = {
-            val backStackEntry by navController.currentBackStackEntryAsState()
-            val titleText: String? = when (backStackEntry?.destination?.route) {
+            val titleText = when (currentRoute) {
                 History::class.qualifiedName -> "Solve History"
                 AddEntry::class.qualifiedName -> "Log Today's Solve"
                 else -> null
@@ -79,13 +80,17 @@ fun AppHost(context: Context) {
             TopAppBar(
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.goToHistory()     //TODO: to be replaced by Home
+                        if (isOnHistory) {
+                            showExitDialog = true
+                        } else {
+                            navController.goToHistory()
+                        }     //TODO: to be replaced by Home
                     }) {
                         Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
                 },
                 title = {
-                    Text(text = titleText.toString())
+                    Text(text = titleText.orEmpty())
                 },
                 actions = {
                     Row {
@@ -97,8 +102,7 @@ fun AppHost(context: Context) {
                         }
 
                         IconButton(onClick = {
-                            navController.navigate(AddEntry)
-                            {launchSingleTop = true}
+                            navController.navigate(AddEntry) {launchSingleTop = true}
                         }) {
                             Icon(
                                 imageVector = Icons.Default.PostAdd,
