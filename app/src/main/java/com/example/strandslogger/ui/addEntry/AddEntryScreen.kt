@@ -86,7 +86,7 @@ fun AddEntryScreen(
         ElevatedCard {
             Column(Modifier.padding(16.dp)) {
                 Row(
-                    Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -109,10 +109,11 @@ fun AddEntryScreen(
                 )
                 Spacer(Modifier.height(8.dp))
                 Row(
-                    Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
+                        modifier = Modifier.align(Alignment.CenterVertically),
                         text = when {
                             state.parsedPreview != null -> "✓ Format recognized"
                             state.parseError -> "Format not recognized"
@@ -130,11 +131,11 @@ fun AddEntryScreen(
             ElevatedCard {
                 Column(Modifier.padding(16.dp)) {
                     Row(
-                        Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text("Parsed Result Preview", style = MaterialTheme.typography.titleMedium)
+                        Text(text = "Parsed Result Preview", style = MaterialTheme.typography.titleMedium)
                         if (solve.isPerfect) {
                             AssistChip(
                                 onClick = {},
@@ -146,21 +147,29 @@ fun AddEntryScreen(
 
                     Spacer(Modifier.height(12.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        InfoBlock("Date", solve.puzzleDate.format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy")), Modifier.weight(1f))
-                        InfoBlock("Puzzle Edition", "Strands #${solve.puzzleNumber}", Modifier.weight(1f))
+                        InfoBlock(
+                            modifier = Modifier.weight(1f),
+                            label = "Date",
+                            value = solve.puzzleDate.format(DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy"))
+                        )
+                        InfoBlock(
+                            modifier = Modifier.weight(1f),
+                            label = "Puzzle Edition",
+                            value = "Strands #${solve.puzzleNumber}"
+                        )
                     }
 
                     Spacer(Modifier.height(12.dp))
-                    InfoBlock("Theme Title", "\"${solve.theme}\"")
+                    InfoBlock(label = "Theme Title", value = "\"${solve.theme}\"")
 
                     Spacer(Modifier.height(12.dp))
                     InfoBlock(
-                        "Hints Detected",
-                        if (solve.hintsUsed == 0) "0 Hints (No Lightbulbs)" else "${solve.hintsUsed} Hints"
+                        label = "Hints Detected",
+                        value = if (solve.hintsUsed == 0) "0 Hints (No Lightbulbs)" else "${solve.hintsUsed} Hints"
                     )
 
                     Spacer(Modifier.height(12.dp))
-                    Text("Glyph Sequence", style = MaterialTheme.typography.labelLarge)
+                    Text(text = "Glyph Sequence", style = MaterialTheme.typography.labelLarge)
                     Spacer(Modifier.height(6.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         extractGlyphs(solve.rawShareText).forEach { glyph ->

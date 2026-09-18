@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilterChip
@@ -105,7 +106,7 @@ fun  SolveCard(
             ) {
                 Icon(
                     modifier = Modifier.fillMaxSize(),
-                    imageVector = Icons.Default.Delete,
+                    imageVector = Icons.Outlined.Delete,
                     contentDescription = null
                 )
             }
@@ -124,25 +125,11 @@ fun  SolveCard(
             fontStyle = FontStyle.Italic
         )
 
-        Row(
+        Text(
             modifier = Modifier.fillMaxWidth().padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = solve.glyphSequence,
-                fontSize = 18.sp,
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Text(
-                modifier = Modifier.clickable(
-                    onClick = {}
-                ),
-                text = "Details >",
-                fontSize = 14.sp,
-            )
-        }
+            text = solve.glyphSequence,
+            fontSize = 18.sp,
+        )
     }
 
     if (solveDeleteConfirmation) {
