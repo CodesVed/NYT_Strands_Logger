@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.PostAdd
+import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.outlined.PostAdd
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -45,6 +45,9 @@ import com.example.strandslogger.ui.addEntry.AddEntryViewModelFactory
 import com.example.strandslogger.ui.history.HistoryScreen
 import com.example.strandslogger.ui.history.HistoryViewModel
 import com.example.strandslogger.ui.history.HistoryViewModelFactory
+import com.example.strandslogger.ui.stats.StatsScreen
+import com.example.strandslogger.ui.stats.StatsViewModel
+import com.example.strandslogger.ui.stats.StatsViewModelFactory
 import kotlin.collections.emptyList
 
 @SuppressLint("ContextCastToActivity")
@@ -75,7 +78,8 @@ fun AppHost(context: Context) {
         topBar = {
             val titleText = when (currentRoute) {
                 History::class.qualifiedName -> "Solve History"
-                AddEntry::class.qualifiedName -> "Log Today's Solve"
+                AddEntry::class.qualifiedName -> stringResource(R.string.app_name)
+                Stats::class.qualifiedName -> "Stats Overview"
                 else -> null
             }
 
@@ -96,10 +100,19 @@ fun AppHost(context: Context) {
                 },
                 actions = {
                     Row {
+                        IconButton(onClick = {
+                            navController.navigate(Stats) {launchSingleTop = true}
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.BarChart,
+                                contentDescription = "Stats"
+                            )
+                        }
+
                         IconButton(onClick = { navController.goToHistory() }) {
                             Icon(
-                                imageVector = Icons.Default.History,
-                                contentDescription = null
+                                imageVector = Icons.Default.CalendarMonth,
+                                contentDescription = "History"
                             )
                         }
 
@@ -107,8 +120,8 @@ fun AppHost(context: Context) {
                             navController.navigate(AddEntry) {launchSingleTop = true}
                         }) {
                             Icon(
-                                imageVector = Icons.Default.PostAdd,
-                                contentDescription = null
+                                imageVector = Icons.Outlined.PostAdd,
+                                contentDescription = "Add"
                             )
                         }
                     }
@@ -145,6 +158,16 @@ fun AppHost(context: Context) {
                     AddEntryScreen(
                         viewModel = addEntryViewModel,
                         onSaveCompleted = { navController.goToHistory() }
+                    )
+                }
+
+                composable<Stats> {
+                    val statsViewModel: StatsViewModel = viewModel(
+                        factory = StatsViewModelFactory(solveRepository, context)
+                    )
+
+                    StatsScreen(
+                        viewModel = statsViewModel
                     )
                 }
             }

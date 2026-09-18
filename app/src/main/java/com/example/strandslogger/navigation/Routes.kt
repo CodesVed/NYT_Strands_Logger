@@ -13,4 +13,7 @@ sealed class Routes {
 
     @Serializable
     object AddEntry
+
+    @Serializable
+    object Stats
 }

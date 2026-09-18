@@ -25,4 +25,16 @@ interface SolveDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM solves WHERE puzzleNumber = :puzzleNumber)")
     suspend fun solveExistsByPuzzleNumber(puzzleNumber: Int): Boolean
+
+    @Query("SELECT MIN(puzzleDateEpochDay) FROM solves")
+    suspend fun getFirstLoggedEpochDay(): Long?
+
+    @Query("SELECT AVG(totalWords) FROM solves")
+    suspend fun getAverageWordsPerPuzzle(): Double?
+
+    @Query("SELECT * FROM solves ORDER BY totalWords DESC LIMIT 1")
+    suspend fun getBiggestPuzzleSolved(): Solve?
+
+    @Query("SELECT * FROM solves ORDER BY puzzleDateEpochDay ASC")
+    suspend fun getAllSolvesOnce(): List<Solve>
 }

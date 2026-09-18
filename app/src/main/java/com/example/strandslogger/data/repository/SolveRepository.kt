@@ -10,6 +10,10 @@ class SolveRepository(private val solveDao: SolveDao) {
         return solveDao.getAllSolves()
     }
 
+    suspend fun getAllSolvesOnce(): List<Solve> {
+        return solveDao.getAllSolvesOnce()
+    }
+
     suspend fun addSolve(solve: Solve) {
         solveDao.add(solve)
     }
