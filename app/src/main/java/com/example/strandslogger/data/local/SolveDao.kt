@@ -37,4 +37,10 @@ interface SolveDao {
 
     @Query("SELECT * FROM solves ORDER BY puzzleDateEpochDay ASC")
     suspend fun getAllSolvesOnce(): List<Solve>
+
+    @Query("SELECT * FROM solves WHERE puzzleNumber=:puzzleNumber")
+    fun getByPuzzleNumber(puzzleNumber: Int): Flow<Solve?>
+
+    @Query("UPDATE solves SET notes=:notes WHERE puzzleNumber=:puzzleNumber")
+    suspend fun updateNotes(puzzleNumber: Int, notes: String?)
 }

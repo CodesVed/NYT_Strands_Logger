@@ -51,7 +51,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun  SolveCard(
     viewModel: HistoryViewModel,
-    solve: Solve
+    solve: Solve,
+    onClick: () -> Unit
 ) {
     var solveDeleteConfirmation by rememberSaveable { mutableStateOf(false) }
 
@@ -59,7 +60,8 @@ fun  SolveCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
-            .background(Color.White)
+            .background(Color.White),
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.padding(start = 10.dp, top = 10.dp),
@@ -165,6 +167,7 @@ fun SolveCardPreview() {
             glyphSequence = "🔵🔵🔵🟡",
             rawShareText = "",
             puzzleDateEpochDay = 23
-        )
+        ),
+        onClick = {}
     )
 }

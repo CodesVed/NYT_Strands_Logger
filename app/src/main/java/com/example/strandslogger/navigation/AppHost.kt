@@ -35,6 +35,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.strandslogger.R
 import com.example.strandslogger.data.local.AppDatabase
 import com.example.strandslogger.data.repository.SolveRepository
@@ -45,6 +46,9 @@ import com.example.strandslogger.ui.addEntry.AddEntryViewModelFactory
 import com.example.strandslogger.ui.history.HistoryScreen
 import com.example.strandslogger.ui.history.HistoryViewModel
 import com.example.strandslogger.ui.history.HistoryViewModelFactory
+import com.example.strandslogger.ui.showDetail.SolveDetailScreen
+import com.example.strandslogger.ui.showDetail.SolveDetailViewModel
+import com.example.strandslogger.ui.showDetail.SolveDetailViewModelFactory
 import com.example.strandslogger.ui.stats.StatsScreen
 import com.example.strandslogger.ui.stats.StatsViewModel
 import com.example.strandslogger.ui.stats.StatsViewModelFactory
@@ -145,7 +149,21 @@ fun AppHost(context: Context) {
 
                     HistoryScreen(
                         viewModel = historyViewModel,
-                        solves = solves
+                        solves = solves,
+                        onSolveClick = { puzzleNumber ->
+                            navController.navigate(SolveDetail(puzzleNumber))
+                        }
+                    )
+                }
+
+                composable<SolveDetail> { backStackEntry ->
+                    val args = backStackEntry.toRoute<SolveDetail>()
+                    val detailViewModel: SolveDetailViewModel = viewModel(
+                        factory = SolveDetailViewModelFactory(solveRepository, args.puzzleNumber)
+                    )
+
+                    SolveDetailScreen(
+                        viewModel = detailViewModel
                     )
                 }
 

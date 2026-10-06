@@ -14,6 +14,10 @@ class SolveRepository(private val solveDao: SolveDao) {
         return solveDao.getAllSolvesOnce()
     }
 
+    fun getSolve(puzzleNumber: Int): Flow<Solve?> {
+        return solveDao.getByPuzzleNumber(puzzleNumber)
+    }
+
     suspend fun addSolve(solve: Solve) {
         solveDao.add(solve)
     }
@@ -28,5 +32,9 @@ class SolveRepository(private val solveDao: SolveDao) {
 
     suspend fun existsByPuzzleNumber(puzzleNumber: Int): Boolean {
         return solveDao.solveExistsByPuzzleNumber(puzzleNumber)
+    }
+
+    suspend fun updateNotes(puzzleNumber: Int, notes: String?) {
+        return solveDao.updateNotes(puzzleNumber, notes)
     }
 }

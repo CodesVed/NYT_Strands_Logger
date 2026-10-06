@@ -16,4 +16,7 @@ sealed class Routes {
 
     @Serializable
     object Stats
+
+    @Serializable
+    data class SolveDetail(val puzzleNumber: Int)
 }

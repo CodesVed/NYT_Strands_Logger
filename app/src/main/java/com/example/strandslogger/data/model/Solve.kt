@@ -17,7 +17,8 @@ data class Solve(
     val glyphSequence: String,
     val rawShareText: String,
     @ColumnInfo(defaultValue = "0")
-    val puzzleDateEpochDay: Long
+    val puzzleDateEpochDay: Long,
+    val notes: String? = null
 ) {
     val isPerfect: Boolean get() = hintsUsed == 0
 

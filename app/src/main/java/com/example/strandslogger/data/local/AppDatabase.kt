@@ -7,7 +7,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.strandslogger.data.model.Solve
 
-@Database(entities = [Solve::class], version = 2, exportSchema = true, autoMigrations = [AutoMigration(from = 1, to = 2)])
+@Database(entities = [Solve::class], version = 3, exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3)
+    ])
 abstract class AppDatabase: RoomDatabase() {
     companion object {
         fun getInstance(context: Context): AppDatabase {

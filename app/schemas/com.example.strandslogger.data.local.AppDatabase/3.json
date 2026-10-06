@@ -1,0 +1,73 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "0e4150a5103d117fd26a7a701444de2b",
+    "entities": [
+      {
+        "tableName": "solves",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`puzzleNumber` INTEGER NOT NULL, `theme` TEXT NOT NULL, `totalWords` INTEGER NOT NULL, `hintsUsed` INTEGER NOT NULL, `glyphSequence` TEXT NOT NULL, `rawShareText` TEXT NOT NULL, `puzzleDateEpochDay` INTEGER NOT NULL DEFAULT 0, `notes` TEXT, PRIMARY KEY(`puzzleNumber`))",
+        "fields": [
+          {
+            "fieldPath": "puzzleNumber",
+            "columnName": "puzzleNumber",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "theme",
+            "columnName": "theme",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalWords",
+            "columnName": "totalWords",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hintsUsed",
+            "columnName": "hintsUsed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "glyphSequence",
+            "columnName": "glyphSequence",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rawShareText",
+            "columnName": "rawShareText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "puzzleDateEpochDay",
+            "columnName": "puzzleDateEpochDay",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "puzzleNumber"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0e4150a5103d117fd26a7a701444de2b')"
+    ]
+  }
+}

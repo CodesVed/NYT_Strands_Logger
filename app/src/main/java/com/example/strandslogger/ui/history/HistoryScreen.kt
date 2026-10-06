@@ -10,13 +10,15 @@ import com.example.strandslogger.data.model.Solve
 @Composable
 fun HistoryScreen(
     viewModel: HistoryViewModel,
-    solves: List<Solve>
+    solves: List<Solve>,
+    onSolveClick: (Int) -> Unit
 ) {
     LazyColumn {
         items(solves.sortedByDescending { it.puzzleNumber }) { solve ->
             SolveCard(
                 viewModel = viewModel,
-                solve = solve
+                solve = solve,
+                onClick = { onSolveClick(solve.puzzleNumber) }
             )
         }
     }
@@ -27,6 +29,7 @@ fun HistoryScreen(
 fun HistoryPreview() {
     HistoryScreen(
         viewModel = viewModel(),
-        solves = emptyList()
+        solves = emptyList(),
+        onSolveClick = {}
     )
 }
